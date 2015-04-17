@@ -1,0 +1,36 @@
+% calculate error
+%Abs
+eTrainLinearAbs=mean(abs(yPredictedLinear(1:nTrain)-yTrain));
+eTrainRbfAbs=mean(abs(yPredictedRbf(1:nTrain)-yTrain));
+eTestLinearAbs=mean(abs(yPredictedLinear(nTrain+1:nTotal)-yTest));
+eTestRbfAbs=mean(abs(yPredictedRbf(nTrain+1:nTotal)-yTest));
+%Rmse
+eTrainLinearRmse=norm(yPredictedLinear(1:nTrain)-yTrain);
+eTrainRbfRmse=norm(yPredictedRbf(1:nTrain)-yTrain);
+eTestLinearRmse=norm(yPredictedLinear(nTrain+1:nTotal)-yTest);
+eTestRbfRmse=norm(yPredictedRbf(nTrain+1:nTotal)-yTest);
+%MAPE
+eLinearTrainMape=(sum((abs(yPredictedLinear(1:nTrain)-yTrain))/yTrain))/length(yPredictedLinear(1:nTrain))
+% first train error
+eLinearTrainMape=0;% linear kernel
+for i=1:length(XTrain)
+    eLinearTrainMape=eLinearTrainMape+abs(yTrain(i)-preds_linear(XTrain(i)))/yTrain(i);
+end
+eLinearTrainMape=eLinearTrainMape/length(XTrain);
+eRbfTrainMape=0;%RBF kernel
+for i=1:length(XTrain)
+    eRbfTrainMape=eRbfTrainMape+abs(yTrain(i)-preds_rbf(XTrain(i)))/yTrain(i);
+end
+eRbfTrainMape=eRbfTrainMape/length(XTrain);
+% then test error
+eLinearTestMape=0;
+for i=1:length(XTest)
+    eLinearTestMape=eLinearTestMape+abs(yTest(i)-preds_linear(XTest(i)))/yTest(i);
+end
+eLinearTestMape=eLinearTestMape/length(XTest);
+
+eRbfTestMape=0;
+for i=1:length(XTest)
+    eRbfTestMape=eRbfTestMape+abs(yTest(i)-preds_rbf(XTest(i)))/yTest(i);
+end
+eRbfTestMape=eRbfTestMape/length(XTest);
