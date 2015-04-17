@@ -1,4 +1,4 @@
-function [yTrain,yPredictedLinear, yPredictedRbf]=regression(city)
+function [yTrain,yPredictedLinear, yPredictedRbf,eTestRbfRmse,eRbfTestMape,eTestRbfAbs]=regression(city,p,c,eps,h)
 %part1 read in data
 load('yShanghai');
 load('yShenzhen');
@@ -21,7 +21,7 @@ legend('Shanghai','Shenzhen');
 
 %part2 transfer and partition
 n=length(series);
-p=12; %tune, autoregressive order
+%p=12; %tune, autoregressive order
 data=transfer(series,p);
 nTotal=n-p;
 nTest=11; %tune, number of data points to test, must less than nTotal, which is n-p
@@ -33,15 +33,12 @@ yTest=data(nTrain+1:nTotal,p+1);
 
 
 %part3 SV Regression
-%search for the best parameter
+%c= 400;%tune
+%eps = 10;%tune
 
-    
-    
-eps = 10;%tune
-c = 400;%tune
 
 % Parameters for the Kernel
-h = std(xTrain)*std(xTrain)';%tune
+%h = 5*std(xTrain)*std(xTrain)';%tune
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -70,6 +67,14 @@ eTrainLinearRmse=norm(yPredictedLinear(1:nTrain)-yTrain);
 eTrainRbfRmse=norm(yPredictedRbf(1:nTrain)-yTrain);
 eTestLinearRmse=norm(yPredictedLinear(nTrain+1:nTotal)-yTest);
 eTestRbfRmse=norm(yPredictedRbf(nTrain+1:nTotal)-yTest);
+%MAPE
+eLinearTrainMape=(sum((abs(yPredictedLinear(1:nTrain)-yTrain))./yTrain))/nTrain
+eRbfTrainMape=(sum((abs(yPredictedRbf(1:nTrain)-yTrain))./yTrain))/nTrain
+eLinearTestMape=(sum((abs(yPredictedLinear(1:nTest)-yTest))./yTest))/nTest
+eRbfTestMape=(sum((abs(yPredictedRbf(1:nTest)-yTest))./yTest))/nTest
+
+
+
 
 
 %part4 Draw figure

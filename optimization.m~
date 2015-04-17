@@ -1,0 +1,33 @@
+%search for the best parameter
+
+city='Shanghai';
+%city='yShenzhen';
+
+m2=12;
+
+RMSE=zeros(12,10);%initial the matrix of different types of errors
+MAPE=zeros(12,10);
+MAE=zeros(12,10);
+for i1=1:500;
+    for i2=1:100;
+        for i3=1:100;
+            for i4=1:12;
+                S1=0;%S is sum of error value at every iteration
+                S2=0;
+                S3=0;
+                c=i1;
+                eps=0.1*i;
+                h = i3*0.1*std(xTrain)*std(xTrain)';
+                p=i4;
+                for k=1:5;
+                    [yTrain,yPredictedLinear, yPredictedRbf,eTestRbfRmse,eRbfTestMape,eTestRbfAbs]=regression(city,p,c,eps,h); 
+                  
+                    S1=S1+eTestRbfRmse;
+                    S2=S2+eRbfTestMape;
+                    S3=S3+eTestRbfAbs;
+                end
+                RMSE(i,j)=S1/5;
+                MAPE(i,j)=S2/5;
+                MAE(i,j)=S3/5;
+    end
+end
